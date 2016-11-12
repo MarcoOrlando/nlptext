@@ -1,17 +1,6 @@
-########################## This file is part of BimaNLP. ############################
-"""
-    This library has dependency with another really great open source library such:
-        > Sklearn v0.16.0(http://scikit-learn.org/stable/)
-        > NLTK 3.0(http://www.nltk.org/)
-        > NumPy v1.9(http://www.numpy.org/)
-        > SciPy(http://www.scipy.org/)
+#!/usr/bin/python
 
-    Copyright (C) 2015 by Aulia Normansyah a.k.a drr3d and other contributors.
-    
-    :license: GNU General Public License (GPL) 2.0,
-              visit http://www.gnu.org/licenses/gpl-2.0.html for more details.
-"""
-
+from collections import Counter
 from numpy import exp
 
 from langutil.tokenizer import tokenize
@@ -35,8 +24,6 @@ api = twitter.Api(consumer_key='jP99ZqVpvGVGHN3vA1ff24I9X',
 
 # query = Twitter.search.tweets(q = "ahok")
 # print "Search complete (%.3f seconds)" % (query["search_metadata"]["completed_in"])
-
-
 
 MAIN_DIR = os.path.abspath(os.path.curdir)
 DS_DIR = '/dataset/'
@@ -81,10 +68,12 @@ def chunk(sent):
     # Proses chunking harus selalu didahuli dengan proses tagging text
     tagger = NGramTag(MAIN_DIR+DS_DIR,r'tb_tagged_katadasar.txt')
     chunk = TagChunker()
+    result = tagger.tag(sent)
 
-    print chunk.treePrint(chunk.tagChunk(tagger.tag(sent, tagregex=True, verbose=True)))
+    return result
+    # print chunk.treePrint(chunk.tagChunk(tagger.tag(sent, tagregex=True, verbose=True)))
     #print chunk.tagTokenExtractor(tagger.tag(sent))
-    print chunk.tagChunk(tagger.tag(sent))
+    # print chunk.tagChunk(tagger.tag(sent))
     #print chunk.tagTokenizer(chunk.tagChunk(tagger.tag(sent)))
 
     #tagger.tag(sent,tagregex=True)
@@ -94,7 +83,11 @@ def chunk(sent):
     #print delTag(sent,'XX')
     
     # Ekstrak specific tag
-    print chunk.treeExtractor(chunk.tagChunk(tagger.tag(sent)),lambda t: t.label() == 'PRED')
+    # print chunk.treeExtractor(chunk.tagChunk(tagger.tag(sent)),lambda t: t.label() == 'PRED')
+
+
+    # print ('haha')
+    # print tagger.tag(sent)
     
 def NGramLangModel():
     cl = Loader(MAIN_DIR+DS_DIR)
@@ -109,14 +102,32 @@ def NGramLangModel():
 
     print "##########################################################"
     
-if __name__ == "__main__":
-    kata = "ahok sangat berani"
+if __name__ == "__main__":    
+    kata = "ahok sangat hebat hebat albert juga sangat kejam, marco jug sangat cepat"
 
-    ## Stemming hanya membutuhkan textTokenize
-    #words = TextTokenizer(kata.lower())
-    #stemm(words)
+    ADJECTIVE_WORD_TYPE = 'ADJ'
 
-    #NgramModel(kata.lower())
-    #NGramLangModel()
+    # ## Stemming hanya membutuhkan textTokenize
+    # #words = TextTokenizer(kata.lower())
+    # #stemm(words)
 
-    chunk(kata)
+    # #NgramModel(kata.lower())
+    # #NGramLangModel()
+
+    print kata
+
+    result = chunk(kata)
+
+    filteredResult = filter(lambda (word, wordType),: wordType == ADJECTIVE_WORD_TYPE, result)
+    print filteredResult
+
+    wordCounterResult = Counter(filteredResult)
+    wordCounts = list(wordCounterResult.items())
+
+    wordCounts.sort(key = (lambda tupleItem: tupleItem[1]), reverse = True)
+
+    for wordCount in wordCounts:
+        word = wordCount[0][0]
+        wordType = wordCount[0][1]
+        wordCount = wordCount[1]
+        print word, wordType, wordCount
