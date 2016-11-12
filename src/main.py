@@ -1,11 +1,5 @@
 ########################## This file is part of BimaNLP. ############################
 """
-    BimaNLP
-    ~~~~~
-
-    Is an open source Python library for Natural Language Processing aimed
-    mainly for Indonesian Language.
-
     This library has dependency with another really great open source library such:
         > Sklearn v0.16.0(http://scikit-learn.org/stable/)
         > NLTK 3.0(http://www.nltk.org/)
@@ -37,9 +31,10 @@ api = twitter.Api(consumer_key='jP99ZqVpvGVGHN3vA1ff24I9X',
                       access_token_key='1392391676-DoVxbpluZBYwN1FDRsS6UlkAVcbl0tLIzTwf3Td',
                       access_token_secret='9akl6YeSxV8fnIlwYypRdWZmhWt0jXKTfyHRmOVl896H3')
 
+# print(api.VerifyCredentials())
 
-query = Twitter.search.tweets(q = "ahok")
-print "Search complete (%.3f seconds)" % (query["search_metadata"]["completed_in"])
+# query = Twitter.search.tweets(q = "ahok")
+# print "Search complete (%.3f seconds)" % (query["search_metadata"]["completed_in"])
 
 
 
