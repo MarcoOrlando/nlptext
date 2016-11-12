@@ -15,15 +15,62 @@ import os
 import twitter
 from twitter import *
 
-api = twitter.Api(consumer_key='jP99ZqVpvGVGHN3vA1ff24I9X',
-                      consumer_secret='LyegLqYBAk6pCEafwrRFp9HIWETKbpeIG8qV9Wvy8WZhoha5hD',
-                      access_token_key='1392391676-DoVxbpluZBYwN1FDRsS6UlkAVcbl0tLIzTwf3Td',
-                      access_token_secret='9akl6YeSxV8fnIlwYypRdWZmhWt0jXKTfyHRmOVl896H3')
+import tweepy
+from tweepy import OAuthHandler
 
-# print(api.VerifyCredentials())
+from tweepy import Stream
+from tweepy.streaming import StreamListener
 
-# query = Twitter.search.tweets(q = "ahok")
-# print "Search complete (%.3f seconds)" % (query["search_metadata"]["completed_in"])
+
+#api = twitter.Api(consumer_key='jP99ZqVpvGVGHN3vA1ff24I9X',
+#                      consumer_secret='LyegLqYBAk6pCEafwrRFp9HIWETKbpeIG8qV9Wvy8WZhoha5hD',
+#                      access_token_key='1392391676-DoVxbpluZBYwN1FDRsS6UlkAVcbl0tLIzTwf3Td',
+#                      access_token_secret='9akl6YeSxV8fnIlwYypRdWZmhWt0jXKTfyHRmOVl896H3')
+
+consumer_key='jP99ZqVpvGVGHN3vA1ff24I9X'
+consumer_secret='LyegLqYBAk6pCEafwrRFp9HIWETKbpeIG8qV9Wvy8WZhoha5hD'
+access_token='1392391676-DoVxbpluZBYwN1FDRsS6UlkAVcbl0tLIzTwf3Td'
+access_secret='9akl6YeSxV8fnIlwYypRdWZmhWt0jXKTfyHRmOVl896H3'
+auth = OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_secret)
+ 
+api = tweepy.API(auth)
+
+def PrintOwnStatus(api):
+    for status in tweepy.Cursor(api.home_timeline).items():
+        # Process a single status
+        print(status.text)
+        #if you want to save to json:
+        #process_or_store(status._json) 
+
+def TakeDataAhok(api):
+    for tweet in tweepy.Cursor(api.search, q="Ahok", lang="tr").items():
+        print(tweet.text)
+
+#Please repair this :"
+#Take all data in twitter for ahok. But I don't know when it will stop.
+#https://marcobonzanini.com/2015/03/02/mining-twitter-data-with-python-part-1/
+class MyListener(StreamListener):
+ 
+    def on_data(self, data):
+        try:
+            with open('dataahok.json', 'a') as f:
+                f.write(data)
+                return True
+        except BaseException as e:
+            print("Error on_data: ", e)
+        return True
+ 
+    def on_error(self, status):
+        print(status)
+        return True
+twitter_stream = Stream(auth, MyListener())
+twitter_stream.filter(track=['ahok'])
+
+#print(api.VerifyCredentials())
+
+#query = Twitter.search.tweets(q = "ahok")
+#print "Search complete (%.3f seconds)" % (query["search_metadata"]["completed_in"])
 
 MAIN_DIR = os.path.abspath(os.path.curdir)
 DS_DIR = '/dataset/'
@@ -103,7 +150,10 @@ def NGramLangModel():
     print "##########################################################"
     
 if __name__ == "__main__":    
-    kata = "ahok sangat hebat hebat albert juga sangat kejam, marco jug sangat cepat"
+    #PrintOwnStatus(api)
+    #TakeDataAhok(api)
+
+    kata = "ahok sangat hebat hebat albert juga sangat kejam, marco juga sangat cepat"
 
     ADJECTIVE_WORD_TYPE = 'ADJ'
 
