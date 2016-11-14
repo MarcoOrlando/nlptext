@@ -1,4 +1,7 @@
 #!/usr/bin/python
+import langmodel.ngram as ngram
+import os
+import tweepy
 
 from collections import Counter
 from numpy import exp
@@ -10,42 +13,20 @@ from langutil.chunker.chunk import TagChunker
 from langmodel.modeler.markov import NGramModels
 from utils.loader import Loader
 
-import langmodel.ngram as ngram
-import os
-import twitter
-from twitter import *
-
-import tweepy
 from tweepy import OAuthHandler
-
 from tweepy import Stream
 from tweepy.streaming import StreamListener
 
-
-#api = twitter.Api(consumer_key='jP99ZqVpvGVGHN3vA1ff24I9X',
-#                      consumer_secret='LyegLqYBAk6pCEafwrRFp9HIWETKbpeIG8qV9Wvy8WZhoha5hD',
-#                      access_token_key='1392391676-DoVxbpluZBYwN1FDRsS6UlkAVcbl0tLIzTwf3Td',
-#                      access_token_secret='9akl6YeSxV8fnIlwYypRdWZmhWt0jXKTfyHRmOVl896H3')
 
 consumer_key='jP99ZqVpvGVGHN3vA1ff24I9X'
 consumer_secret='LyegLqYBAk6pCEafwrRFp9HIWETKbpeIG8qV9Wvy8WZhoha5hD'
 access_token='1392391676-DoVxbpluZBYwN1FDRsS6UlkAVcbl0tLIzTwf3Td'
 access_secret='9akl6YeSxV8fnIlwYypRdWZmhWt0jXKTfyHRmOVl896H3'
+print 'haha'
 auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
  
 api = tweepy.API(auth)
-
-def PrintOwnStatus(api):
-    for status in tweepy.Cursor(api.home_timeline).items():
-        # Process a single status
-        print(status.text)
-        #if you want to save to json:
-        #process_or_store(status._json) 
-
-def TakeDataAhok(api):
-    for tweet in tweepy.Cursor(api.search, q="Ahok", lang="tr").items():
-        print(tweet.text)
 
 #Please repair this :"
 #Take all data in twitter for ahok. But I don't know when it will stop.
@@ -55,7 +36,14 @@ class MyListener(StreamListener):
     def on_data(self, data):
         try:
             with open('dataahok.json', 'a') as f:
-                f.write(data)
+
+                import unicodedata
+                print ('unicode')
+                print(data)
+
+                print ('string')
+                newData = unicodedata.normalize('NFKD', data).encode('ascii', 'ignore')
+                f.write(newData + ',')
                 return True
         except BaseException as e:
             print("Error on_data: ", e)
@@ -64,9 +52,11 @@ class MyListener(StreamListener):
     def on_error(self, status):
         print(status)
         return True
-twitter_stream = Stream(auth, MyListener())
-twitter_stream.filter(track=['ahok'])
 
+# print 'stream'
+# twitter_stream = Stream(auth, MyListener())
+# twitter_stream.filter(track=['ahok'])
+# print ('stream1')
 #print(api.VerifyCredentials())
 
 #query = Twitter.search.tweets(q = "ahok")
@@ -150,34 +140,49 @@ def NGramLangModel():
     print "##########################################################"
     
 if __name__ == "__main__":    
-    #PrintOwnStatus(api)
-    #TakeDataAhok(api)
-
-    kata = "ahok sangat hebat hebat albert juga sangat kejam, marco juga sangat cepat"
+    import json
 
     ADJECTIVE_WORD_TYPE = 'ADJ'
 
-    # ## Stemming hanya membutuhkan textTokenize
-    # #words = TextTokenizer(kata.lower())
-    # #stemm(words)
+    with open('dataahok.json') as json_data:
+        d = json.load(json_data)
+       
+        finalResult = []
 
-    # #NgramModel(kata.lower())
-    # #NGramLangModel()
+        for data in d:
+            print data['text']
 
-    print kata
+            result = chunk(data['text'])
+            print 'result'
+            print (result)
 
-    result = chunk(kata)
+            filteredResult = filter(lambda (word, wordType),: wordType == ADJECTIVE_WORD_TYPE, result)
+            print filteredResult
 
-    filteredResult = filter(lambda (word, wordType),: wordType == ADJECTIVE_WORD_TYPE, result)
-    print filteredResult
+            wordCounterResult = Counter(filteredResult)
+            wordCounts = list(wordCounterResult.items())
 
-    wordCounterResult = Counter(filteredResult)
-    wordCounts = list(wordCounterResult.items())
+            wordCounts.sort(key = (lambda tupleItem: tupleItem[1]), reverse = True)
 
-    wordCounts.sort(key = (lambda tupleItem: tupleItem[1]), reverse = True)
+            for wordCount in wordCounts:
+                word = wordCount[0][0]
+                wordType = wordCount[0][1]
+                wordCount = wordCount[1]
+                print (word, wordType, wordCount)
+                finalResult.append((word, wordType, wordCount))
 
-    for wordCount in wordCounts:
-        word = wordCount[0][0]
-        wordType = wordCount[0][1]
-        wordCount = wordCount[1]
-        print word, wordType, wordCount
+        finalResult.sort(key = lambda item: item[2], reverse = True)
+        print finalResult
+
+    # kata = "ahok sangat hebat hebat albert juga sangat kejam, marco juga sangat cepat"
+
+
+    # # ## Stemming hanya membutuhkan textTokenize
+    # # #words = TextTokenizer(kata.lower())
+    # # #stemm(words)
+
+    # # #NgramModel(kata.lower())
+    # # #NGramLangModel()
+
+    # print kata
+
