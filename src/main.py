@@ -2,6 +2,11 @@
 import langmodel.ngram as ngram
 import os
 import tweepy
+import unicodedata
+import csv
+import json
+
+from datetime import datetime
 
 from collections import Counter
 from numpy import exp
@@ -27,7 +32,11 @@ auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
  
 api = tweepy.API(auth)
-
+filename = 'dataahok' + str(datetime.now()) + '.csv'
+with open(filename, 'a') as f:
+    fieldnames = ['created_at','text']
+    writer = csv.DictWriter(f, fieldnames=fieldnames)
+    writer.writeheader()
 #Please repair this :"
 #Take all data in twitter for ahok. But I don't know when it will stop.
 #https://marcobonzanini.com/2015/03/02/mining-twitter-data-with-python-part-1/
@@ -35,15 +44,15 @@ class MyListener(StreamListener):
  
     def on_data(self, data):
         try:
-            with open('dataahok.json', 'a') as f:
+        	with open(filename, 'a') as f:
+        		print ('unicode')
+        		print ('string')
+        		newData = unicodedata.normalize('NFKD', data).encode('ascii', 'ignore')
+        		
+        		jsonData = json.loads(newData)
 
-                import unicodedata
-                print ('unicode')
-                print(data)
-
-                print ('string')
-                newData = unicodedata.normalize('NFKD', data).encode('ascii', 'ignore')
-                f.write(newData + ',')
+        		writer.writerow((jsonData['created_at'], jsonData['text']))
+        		#f.write(jsonData['text'] + ',')
                 return True
         except BaseException as e:
             print("Error on_data: ", e)
@@ -54,8 +63,9 @@ class MyListener(StreamListener):
         return True
 
 # print 'stream'
-# twitter_stream = Stream(auth, MyListener())
-# twitter_stream.filter(track=['ahok'])
+
+twitter_stream = Stream(auth, MyListener())
+twitter_stream.filter(track=['ahok'])
 # print ('stream1')
 #print(api.VerifyCredentials())
 
