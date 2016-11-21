@@ -185,6 +185,20 @@ if __name__ == "__main__":
         finalResult.sort(key = lambda item: item[2], reverse = True)
         print finalResult
 
+    print ('setelah unused word dibuang')
+    with open("dataset/stopwords.txt", "r") as ins:
+        unusedWords = []
+        for line in ins:
+            unusedWords.append(line)
+
+        for data in finalResult:
+            for data2 in unusedWords:
+                if data[0] == data2:
+                    finalResult.remove(data)
+
+    for data in finalResult:
+        print data[0]    
+
     # kata = "ahok sangat hebat hebat albert juga sangat kejam, marco juga sangat cepat"
 
 
