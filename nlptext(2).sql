@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 21, 2016 at 01:36 AM
+-- Generation Time: Nov 21, 2016 at 01:49 AM
 -- Server version: 5.6.31-0ubuntu0.15.10.1
 -- PHP Version: 5.6.11-1ubuntu3.4
 
@@ -19,6 +19,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `nlptext`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tweet_kata`
+--
+
+CREATE TABLE IF NOT EXISTS `tweet_kata` (
+  `ID_tweet_kata` int(11) NOT NULL,
+  `calon` varchar(50) NOT NULL,
+  `kata` varchar(50) NOT NULL,
+  `tweet_id` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1069,6 +1082,12 @@ INSERT INTO `twitter` (`ID`, `created_at`, `teks`, `name`, `location`, `descript
 --
 
 --
+-- Indexes for table `tweet_kata`
+--
+ALTER TABLE `tweet_kata`
+  ADD PRIMARY KEY (`ID_tweet_kata`);
+
+--
 -- Indexes for table `tweet_result`
 --
 ALTER TABLE `tweet_result`
@@ -1084,6 +1103,11 @@ ALTER TABLE `twitter`
 -- AUTO_INCREMENT for dumped tables
 --
 
+--
+-- AUTO_INCREMENT for table `tweet_kata`
+--
+ALTER TABLE `tweet_kata`
+  MODIFY `ID_tweet_kata` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tweet_result`
 --
