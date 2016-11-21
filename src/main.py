@@ -35,7 +35,7 @@ class MyListener(StreamListener):
  
     def on_data(self, data):
         try:
-            with open('dataahok.json', 'a') as f:
+            with open('dataahy.json', 'a') as f:
 
                 import unicodedata
                 print ('unicode')
@@ -54,8 +54,8 @@ class MyListener(StreamListener):
         return True
 
 # print 'stream'
-# twitter_stream = Stream(auth, MyListener())
-# twitter_stream.filter(track=['ahok'])
+twitter_stream = Stream(auth, MyListener())
+twitter_stream.filter(track=['ahy'])
 # print ('stream1')
 #print(api.VerifyCredentials())
 

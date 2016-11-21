@@ -1,5 +1,4 @@
 numpy
 nltk
 scipy
-python-twitter
 tweepy==3.3.0
