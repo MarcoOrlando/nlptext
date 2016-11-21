@@ -35,7 +35,7 @@ class MyListener(StreamListener):
  
     def on_data(self, data):
         try:
-            with open('dataahy.json', 'a') as f:
+            with open('dataanies.json', 'a') as f:
 
                 import unicodedata
                 print ('unicode')
@@ -54,8 +54,6 @@ class MyListener(StreamListener):
         return True
 
 # print 'stream'
-twitter_stream = Stream(auth, MyListener())
-twitter_stream.filter(track=['ahy'])
 # print ('stream1')
 #print(api.VerifyCredentials())
 
@@ -169,7 +167,20 @@ if __name__ == "__main__":
                 wordType = wordCount[0][1]
                 wordCount = wordCount[1]
                 print (word, wordType, wordCount)
-                finalResult.append((word, wordType, wordCount))
+
+                found = False
+                numberOfFinalResult = len(finalResult)
+                i = 0
+
+                while (not found and i < numberOfFinalResult):
+                    if (finalResult[i][0] == word):
+                        finalResult[i] = (word, wordType, finalResult[i][2] + wordCount)
+                        found = True
+                    else:
+                        i = i + 1
+
+                if (not found):
+                    finalResult.append((word, wordType, wordCount))                    
 
         finalResult.sort(key = lambda item: item[2], reverse = True)
         print finalResult
