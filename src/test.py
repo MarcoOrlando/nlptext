@@ -4,7 +4,7 @@ import json
 
 from mysql.connector import Error
 
-def insertTweetToMySql(data):
+def insertTweetToMySql(data, calon):
   try:
         conn = mysql.connector.connect(host='localhost',
                                        database='nlptext',
@@ -24,7 +24,7 @@ def insertTweetToMySql(data):
                 datum["user"]["description"] = 'UNKNOWN'
 
               datum["user"]["description"] = datum["user"]["description"].replace("'","")
-              cursor.execute("INSERT INTO twitter (created_at,teks, name, location, description, follower_count, friends_count, retweet_count) VALUES (\'" + datum["created_at"] + "\',\'" + (datum["text"]) + "\',\'" + datum["user"]["name"] + "\',\'" + (datum["user"]["location"]) + "\',\'" + (datum["user"]["description"]) + "\'," + str(datum["user"]["followers_count"]) + "," +str(datum["user"]["friends_count"]) + "," + str(datum["retweet_count"]) + ")")
+              cursor.execute("INSERT INTO twitter (created_at,teks, name, location, description, follower_count, friends_count, retweet_count, calon) VALUES (\'" + datum["created_at"] + "\',\'" + (datum["text"]) + "\',\'" + datum["user"]["name"] + "\',\'" + (datum["user"]["location"]) + "\',\'" + (datum["user"]["description"]) + "\'," + str(datum["user"]["followers_count"]) + "," +str(datum["user"]["friends_count"]) + "," + str(datum["retweet_count"]) + ",\'" + calon + "\')")
               conn.commit()
             print("Finish add to database")
   except Error as e:
@@ -33,4 +33,4 @@ def insertTweetToMySql(data):
 if __name__ == '__main__':
   with open('dataahok.json') as data_file:
     data = json.load(data_file)
-  insertTweetToMySql(data)
+  insertTweetToMySql(data, "ahok")
