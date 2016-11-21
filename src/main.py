@@ -146,16 +146,13 @@ if __name__ == "__main__":
         d = json.load(json_data)
        
         finalResult = []
+        finalTweets = []
 
         for data in d:
-            print data['text']
 
             result = chunk(data['text'])
-            print 'result'
-            print (result)
 
             filteredResult = filter(lambda (word, wordType),: wordType == ADJECTIVE_WORD_TYPE, result)
-            print filteredResult
 
             wordCounterResult = Counter(filteredResult)
             wordCounts = list(wordCounterResult.items())
@@ -166,7 +163,8 @@ if __name__ == "__main__":
                 word = wordCount[0][0]
                 wordType = wordCount[0][1]
                 wordCount = wordCount[1]
-                print (word, wordType, wordCount)
+
+                finalTweets.append((data['id'], word))
 
                 found = False
                 numberOfFinalResult = len(finalResult)
