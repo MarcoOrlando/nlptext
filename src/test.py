@@ -24,7 +24,7 @@ def insertTweetToMySql(data, calon):
                 datum["user"]["description"] = 'UNKNOWN'
 
               datum["user"]["description"] = datum["user"]["description"].replace("'","")
-              cursor.execute("INSERT INTO twitter (created_at,teks, name, location, description, follower_count, friends_count, retweet_count, calon) VALUES (\'" + datum["created_at"] + "\',\'" + (datum["text"]) + "\',\'" + datum["user"]["name"] + "\',\'" + (datum["user"]["location"]) + "\',\'" + (datum["user"]["description"]) + "\'," + str(datum["user"]["followers_count"]) + "," +str(datum["user"]["friends_count"]) + "," + str(datum["retweet_count"]) + ",\'" + calon + "\')")
+              cursor.execute("INSERT INTO twitter (created_at,teks, name, location, description, follower_count, friends_count, retweet_count, calon, tweet_id) VALUES (\'" + datum["created_at"] + "\',\'" + (datum["text"]) + "\',\'" + datum["user"]["name"] + "\',\'" + (datum["user"]["location"]) + "\',\'" + (datum["user"]["description"]) + "\'," + str(datum["user"]["followers_count"]) + "," +str(datum["user"]["friends_count"]) + "," + str(datum["retweet_count"]) + ",\'" + calon + "\',\'" + str(datum["id"]) + "\')")
               conn.commit()
             print("Finish add to database")
   except Error as e:
