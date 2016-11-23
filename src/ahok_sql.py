@@ -7,9 +7,11 @@ from mysql.connector import Error
 def insertTweetToMySql(data, calon):
   try:
         conn = mysql.connector.connect(host='localhost',
-                                       database='nlptext',
+                                       database='nlp_text',
                                        user='root',
-                                       password='')
+                                       password='alberttriadrian')
+
+
         if conn.is_connected():
             cursor = conn.cursor();
             print('Connected to MySQL database')
@@ -24,6 +26,10 @@ def insertTweetToMySql(data, calon):
                 datum["user"]["description"] = 'UNKNOWN'
 
               datum["user"]["description"] = datum["user"]["description"].replace("'","")
+
+              if 'retweeted_status' in datum:
+                datum['retweet_count'] = datum['retweeted_status']['retweet_count']
+
               cursor.execute("INSERT INTO twitter (created_at,teks, name, location, description, follower_count, friends_count, retweet_count, calon, tweet_id) VALUES (\'" + datum["created_at"] + "\',\'" + (datum["text"]) + "\',\'" + datum["user"]["name"] + "\',\'" + (datum["user"]["location"]) + "\',\'" + (datum["user"]["description"]) + "\'," + str(datum["user"]["followers_count"]) + "," +str(datum["user"]["friends_count"]) + "," + str(datum["retweet_count"]) + ",\'" + calon + "\',\'" + str(datum["id"]) + "\')")
               conn.commit()
             print("Finish add to database")
@@ -75,4 +81,5 @@ def insertTweetResult(data, calon):
 if __name__ == '__main__':
   with open('dataahok.json') as data_file:
     data = json.load(data_file)
-  insertTweetToMySql(data, "ahok")
+
+  insertTweetToMySql(data, "AHOK")
