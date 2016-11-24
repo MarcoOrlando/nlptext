@@ -146,9 +146,9 @@ def NGramLangModel():
 def insertTweetToMySql(data, calon):
   try:
         conn = mysql.connector.connect(host='localhost',
-                                       database='nlptext',
+                                       database='nlp_text',
                                        user='root',
-                                       password='')
+                                       password='alberttriadrian')
         if conn.is_connected():
             cursor = conn.cursor();
             print('Connected to MySQL database')
@@ -173,11 +173,12 @@ def insertTweetToMySql(data, calon):
 def insertTweetKata(data, calon):
   #0 : tweet_id
   #1 : kata
+  print ('albert')
   try:
         conn = mysql.connector.connect(host='localhost',
-                                       database='nlptext',
+                                       database='nlp_text',
                                        user='root',
-                                       password='')
+                                       password='alberttriadrian')
         if conn.is_connected():
             cursor = conn.cursor();
             print('Connected to MySQL database')
@@ -271,7 +272,7 @@ if __name__ == "__main__":
 
     for data in finalResult:
         print data[0]
-    insertTweetResult(finalResult,"AHOK")    
+
     insertTweetKata(finalTweets, "AHOK")
 
     with open('ahok_result.txt', 'a') as the_file:

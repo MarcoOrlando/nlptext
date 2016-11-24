@@ -8,9 +8,9 @@ def insertTweetResult(data, calon):
   #2 : jumlah_kemunculan
   try:
         conn = mysql.connector.connect(host='localhost',
-                                       database='nlptext',
+                                       database='nlp_text',
                                        user='root',
-                                       password='')
+                                       password='alberttriadrian')
         if conn.is_connected():
             cursor = conn.cursor();
             print('Connected to MySQL database')
