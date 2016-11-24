@@ -278,6 +278,7 @@ if __name__ == "__main__":
         for data in finalResult:
             the_file.write(data[0] + ',' + str(data[2]) + '\n')
 
+
     # kata = "ahok sangat hebat hebat albert juga sangat kejam, marco juga sangat cepat"
 
 
