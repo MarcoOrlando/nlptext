@@ -144,6 +144,8 @@ if __name__ == "__main__":
 
     with open('dataanies.json') as json_data:
         d = json.load(json_data)
+
+        insertTweetToMySql(d, "ANIES")
        
         finalResult = []
         finalTweets = []
@@ -193,6 +195,8 @@ if __name__ == "__main__":
             for data2 in unusedWords:
                 if data[0] == data2:
                     finalResult.remove(data)
+
+    insertTweetKata(finalTweets, "ANIES")
 
     with open('anies_result.txt', 'a') as the_file:
         for data in finalResult:
