@@ -9,7 +9,7 @@ def insertTweetToMySql(data, calon):
         conn = mysql.connector.connect(host='localhost',
                                        database='nlp_text',
                                        user='root',
-                                       password='alberttriadrian')
+                                       password='')
 
 
         if conn.is_connected():
@@ -24,6 +24,8 @@ def insertTweetToMySql(data, calon):
 
               if (datum["user"]["description"] is None):
                 datum["user"]["description"] = 'UNKNOWN'
+
+              datum["user"]["location"] = datum["user"]["location"].replace("'","")
 
               datum["user"]["description"] = datum["user"]["description"].replace("'","")
 
@@ -42,7 +44,7 @@ def insertTweetKata(data, calon):
   #1 : kata
   try:
         conn = mysql.connector.connect(host='localhost',
-                                       database='nlptext',
+                                       database='nlp_text',
                                        user='root',
                                        password='')
         if conn.is_connected():
@@ -62,7 +64,7 @@ def insertTweetResult(data, calon):
   #1 : jumlah_kemunculan
   try:
         conn = mysql.connector.connect(host='localhost',
-                                       database='nlptext',
+                                       database='nlp_text',
                                        user='root',
                                        password='')
         if conn.is_connected():
@@ -79,7 +81,7 @@ def insertTweetResult(data, calon):
 
 
 if __name__ == '__main__':
-  with open('dataahok.json') as data_file:
+  with open('dataanies.json') as data_file:
     data = json.load(data_file)
 
-  insertTweetToMySql(data, "AHOK")
+  insertTweetToMySql(data, "ANIES")
