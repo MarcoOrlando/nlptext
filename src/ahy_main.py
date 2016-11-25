@@ -273,7 +273,7 @@ if __name__ == "__main__":
     for data in finalResult:
         print data[0]
 
-    insertTweetKata(finalTweets, "ahy")
+    insertTweetKata(finalTweets, "AHY")
 
     with open('ahy_result.txt', 'a') as the_file:
         for data in finalResult:
