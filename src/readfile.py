@@ -10,7 +10,7 @@ def insertTweetResult(data, calon):
         conn = mysql.connector.connect(host='localhost',
                                        database='nlp_text',
                                        user='root',
-                                       password='alberttriadrian')
+                                       password='')
         if conn.is_connected():
             cursor = conn.cursor();
             print('Connected to MySQL database')
@@ -25,7 +25,7 @@ def insertTweetResult(data, calon):
 
 
 if __name__ == "__main__":
-  filename = 'ahok_result.txt'
+  filename = 'anies_result.txt'
   data = []
   with open(filename, 'r') as the_file:
     for line in the_file:
@@ -33,4 +33,4 @@ if __name__ == "__main__":
       word[1].replace('/n','')
       word2 = (word[0],int(word[1]))
       data.append(word2)
-  insertTweetResult(data, "AHOK")
+  insertTweetResult(data, "ANIES")
