@@ -34,4 +34,5 @@ pendek,1
 mutlak,1
 kafir,1
 ramah,1
-rajin,1lembang,1
+rajin,1
+lembang,1
